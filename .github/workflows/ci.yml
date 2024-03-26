@@ -1,19 +1,22 @@
 name: CI
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup nightly Rust
-      run: rustup toolchain install nightly-2024-02-06 --profile minimal --target wasm32-unknown-unknown --component rust-src
-    - name: Install npm deps
-      working-directory: ./test
-      run: npm ci
-    - name: Run tests
-      working-directory: ./test
-      run: npm test
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@v1
+        with:
+          toolchain: nightly-2022-12-12
+          targets: wasm32-unknown-unknown
+          profile: minimal # TODO: Use minimal profile to speed up other builds where other tools are not necessary
+          component: rust-src
+      - name: Install npm deps
+        working-directory: ./test
+        run: npm ci
+      - name: Run tests
+        working-directory: ./test
+        run: npm test
