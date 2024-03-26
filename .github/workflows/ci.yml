@@ -1,6 +1,9 @@
 name: CI
 
 on: [push, pull_request]
+env: 
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: git
+
 
 jobs:
   test:
@@ -11,9 +14,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@v1
         with:
           toolchain: nightly-2022-12-12
-          targets: wasm32-unknown-unknown
-          profile: minimal # TODO: Use minimal profile to speed up other builds where other tools are not necessary
-          component: rust-src
+          target: wasm32-unknown-unknown
+          components: rust-src
       - name: Install npm deps
         working-directory: ./test
         run: npm ci
